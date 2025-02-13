@@ -7,13 +7,25 @@ export default function Contacts({ contacts, changeChat }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await JSON.parse(
-        localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
-      );
-      
+      const storedData = await localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY);
 
-      setCurrentUserName(data.username);
+      if (!storedData) {
+        console.error("No user data found in localStorage");
+        return;
+      }
+
+      try {
+        const data = JSON.parse(storedData);
+        if (data?.username) {
+          setCurrentUserName(data.username);
+        } else {
+          console.error("Invalid user data format:", data);
+        }
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
     };
+
     fetchData();
   }, []);
 
@@ -30,14 +42,12 @@ export default function Contacts({ contacts, changeChat }) {
             <img src={Logo} alt="logo" className="h-8" />
             <h3 className="uppercase">Fusion Chat</h3>
           </div>
-          <div className="flex flex-col items-center overflow-auto  gap-2 flex-1 p-2">
+          <div className="flex flex-col items-center overflow-auto gap-2 flex-1 p-2">
             {contacts.map((contact, index) => (
               <div
                 key={contact._id}
                 className={`flex items-center gap-4 p-3 rounded-md cursor-pointer hover:bg-gray-700 transition-colors w-11/12
-                   ${
-                     index === currentSelected ? "bg-gray-600" : "bg-gray-800"
-                   }`}
+                   ${index === currentSelected ? "bg-gray-600" : "bg-gray-800"}`}
                 onClick={() => changeCurrentChat(index, contact)}
               >
                 <h3>{contact.username}</h3>

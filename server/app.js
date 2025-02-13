@@ -42,7 +42,7 @@ const io = socket(server, {
 global.onlineUsers = new Map();
 
 io.on("connection", (socket) => {
-  console.log("New client connected");
+  
 
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
