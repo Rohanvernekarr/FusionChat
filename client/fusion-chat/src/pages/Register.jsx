@@ -119,12 +119,16 @@ function Register() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-richblack">
-      <div className="bg-richblack p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-White text-center mb-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="relative w-full max-w-md p-8 group-hover:opacity-100 transition-opacity duration-300 bg-black/30 rounded-xl backdrop-blur-md border border-gray-800 shadow-[0_0_15px_rgba(88,_28,_255,_0.15)]">
+        {/* Decorative gradient line */}
+        <div className="absolute top-0 left-0 w-full h-1 "></div>
+        
+        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-400 to-gray-700 text-center mb-8">
           Fusion Chat
         </h1>
-        <form className="flex flex-col" onSubmit={handleSubmit}>
+
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
           <input
             type="text"
             name="username"
@@ -132,8 +136,12 @@ function Register() {
             value={values.username}
             onChange={handleChange}
             required
-            className="p-3 mb-4 border-b border-gray-500 text-White bg-richblack rounded-md focus:outline-none hover:shadow-2xl transition duration-200 focus:ring-2 focus:ring-gray-500"
+            className="w-full px-4 py-3 bg-black/50 text-white rounded-lg border border-gray-800 
+            placeholder-gray-500 focus:outline-none focus:border-gray-500 
+            focus:ring-2 focus:ring-gray-500/20 transition-all duration-300
+            hover:border-gray-700 hover:shadow-[0_0_10px_rgba(88,_28,_255,_0.1)]"
           />
+
           <input
             type="email"
             name="email"
@@ -141,9 +149,13 @@ function Register() {
             value={values.email}
             onChange={handleChange}
             required
-            className="p-3 mb-4 border-b bg-richblack text-White border-gray-500 rounded-md focus:outline-none hover:shadow-2xl transition duration-200 focus:ring-2 focus:ring-gray-500"
+            className="w-full px-4 py-3 bg-black/50 text-white rounded-lg border border-gray-800 
+            placeholder-gray-500 focus:outline-none focus:border-gray-500 
+            focus:ring-2 focus:ring-gray-500/20 transition-all duration-300
+            hover:border-gray-700 hover:shadow-[0_0_10px_rgba(88,_28,_255,_0.1)]"
           />
-          <div className="relative mb-6">
+
+          <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
@@ -151,17 +163,22 @@ function Register() {
               value={values.password}
               onChange={handleChange}
               required
-              className="p-3 w-full border-b bg-richblack text-White border-gray-500 rounded-md focus:outline-none hover:shadow-2xl transition duration-200 focus:ring-2 focus:ring-gray-500"
+              className="w-full px-4 py-3 bg-black/50 text-white rounded-lg border border-gray-800 
+              placeholder-gray-500 focus:outline-none focus:border-gray-500 
+              focus:ring-2 focus:ring-gray-500/20 transition-all duration-300
+              hover:border-gray-700 hover:shadow-[0_0_10px_rgba(88,_28,_255,_0.1)]"
             />
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute right-3 top-3 text-gray-500 hover:text-white transition duration-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 
+              hover:text-gray-400 focus:outline-none transition-colors duration-300"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
-          <div className="relative mb-6">
+
+          <div className="relative">
             <input
               type={showConfirmPassword ? "text" : "password"}
               name="confirmPassword"
@@ -169,27 +186,41 @@ function Register() {
               value={values.confirmPassword}
               onChange={handleChange}
               required
-              className="p-3 w-full border-b bg-richblack text-White border-gray-500 rounded-md focus:outline-none hover:shadow-2xl transition duration-200 focus:ring-2 focus:ring-gray-500"
+              className="w-full px-4 py-3 bg-black/50 text-white rounded-lg border border-gray-800 
+              placeholder-gray-500 focus:outline-none focus:border-gray-500 
+              focus:ring-2 focus:ring-gray-500/20 transition-all duration-300
+              hover:border-gray-700 hover:shadow-[0_0_10px_rgba(88,_28,_255,_0.1)]"
             />
             <button
               type="button"
               onClick={toggleConfirmPasswordVisibility}
-              className="absolute right-3 top-3 text-gray-500 hover:text-white transition duration-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 
+              hover:text-gray-400 focus:outline-none transition-colors duration-300"
             >
               {showConfirmPassword ? "Hide" : "Show"}
             </button>
           </div>
+
           <button
             type="submit"
             disabled={loading}
-            className="p-3 bg-black text-white font-semibold rounded-md hover:bg-Black shadow-2xl transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-4 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white 
+            rounded-lg font-semibold transition-all duration-300
+            hover:shadow-[0_0_20px_rgba(88,_28,_255,_0.3)] 
+            active:scale-[0.98] "
           >
+
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
-        <p className="mt-4 text-sm text-white text-center">
+
+        <p className="mt-6 text-gray-400 text-center">
           Already have an account?{" "}
-          <a href="/login" className="text-gray-500 hover:underline">
+          <a 
+            href="/login" 
+            className="text-gray-400 hover:text-gray-300 transition-colors duration-300 
+            hover:underline focus:outline-none focus:ring-2 focus:ring-gray-500/20"
+          >
             Login
           </a>
         </p>

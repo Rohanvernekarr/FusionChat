@@ -16,6 +16,15 @@ module.exports = {
         payngray: "53687e",
         jet: "3a3238"
       },
+      animation: {
+        'spin-slow': 'spin 15s linear infinite',
+        'spin-slower': 'spin 20s linear infinite reverse',
+      },
+      keyframes: {
+        shimmer: {
+          '100%': { transform: 'translateX(100%)' },
+        }
+      }
     },
   },
   plugins: [],
