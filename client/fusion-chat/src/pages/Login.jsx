@@ -18,7 +18,7 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("key")) {
+    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
       navigate("/login");
     }
   }, [navigate]);

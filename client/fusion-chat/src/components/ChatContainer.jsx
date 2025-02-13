@@ -59,7 +59,7 @@ export default function ChatContainer({ currentChat, socket }) {
         setArrivalMessage({ fromSelf: false, message: msg });
       });
     }
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
@@ -73,11 +73,7 @@ export default function ChatContainer({ currentChat, socket }) {
     <div className="flex flex-col h-full bg-gray-900">
       <div className="flex items-center justify-between p-4 bg-gray-800">
         <div className="flex items-center gap-4">
-          <img
-            className="h-12 rounded-full"
-            src={`data:image/svg+xml;base64,${currentChat.avatarImage}`}
-            alt="avatar"
-          />
+          
           <h3 className="text-white text-lg">{currentChat.username}</h3>
         </div>
         <Logout />

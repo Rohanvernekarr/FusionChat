@@ -1,49 +1,57 @@
-const express = require('express');
-const cors = require('cors');
-const http = require('http')
-const {Server} = require('socket.io')
-const mongoose = require('mongoose');
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/auth");
+const messageRoutes = require("./routes/messages");
 const app = express();
-const userRoutes = require("./routes/messages.js")
-require('dotenv').config();
-
-const server = http.createServer(app)
-const io = new Server(server)
-
-const PORT =5000;
-const MONGO_URL ="mongodb://localhost:27017/chat"
+const socket = require("socket.io");
+require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth", userRoutes)
 
-// Connect to MongoDB
-mongoose.connect(MONGO_URL)
-.then(() => console.log("Connected to MongoDB"))
-.catch((err) => console.error("Error connecting to MongoDB:", err));
-
-app.get('/', (req, res) => {
-    res.send('Chat server is running!');
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("DB Connection Successful");
+  })
+  .catch((err) => {
+    console.log(err.message);
   });
 
-  io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
-  
-    // Broadcast messages
-    socket.on('chatMessage', async (data) => {
-      const newMessage = new Message({ username: data.username, message: data.message });
-      await newMessage.save();
-      io.emit('chatMessage', newMessage);
-    });
-  
-    // Handle disconnection
-    socket.on('disconnect', () => {
-      console.log('User disconnected:', socket.id);
-    });
+app.get("/ping", (_req, res) => {
+  return res.json({ msg: "Ping Successful" });
 });
 
-// Start the server
-const chatapp = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
+
+const PORT =  4000;
+const server = app.listen(PORT, () =>
+  console.log(`Server started on ${PORT}`)
+).on("error", (err) => {
+  console.error("Server error:", err);
+});
+
+const io = socket(server, {
+  cors: {
+    origin: "http://localhost:3000", // Update to match your frontend URL
+    credentials: true,
+  },
+});
+
+const onlineUsers = new Map();
+io.on("connection", (socket) => {
+  const chatSocket = socket;
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+  });
+
+  socket.on("send-msg", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to);
+    if (sendUserSocket) {
+      socket.to(sendUserSocket).emit("msg-receive", data.msg);
+    }
+  });
 });

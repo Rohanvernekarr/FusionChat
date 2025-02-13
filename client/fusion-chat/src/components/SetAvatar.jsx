@@ -1,6 +1,6 @@
+/*
+
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Buffer } from "buffer";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { setAvatarRoute } from "../utils/ApiRoutes";
 import loader from "../assets/loader.gif";
 
 export default function SetAvatar() {
-  const api = `https://api.multiavatar.com/`;
+  const api = "https://api.multiavatar.com";
   const navigate = useNavigate();
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,24 +23,22 @@ export default function SetAvatar() {
   };
 
   useEffect(() => {
-    const checkUser = async () => {
-      if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-        navigate("/login");
-      }
-    };
-    checkUser();
+    if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+      navigate("/login");
+    }
   }, [navigate]);
 
   useEffect(() => {
     const fetchAvatars = async () => {
       try {
-        const avatarPromises = Array.from({ length: 4 }, async () => {
-          const { data } = await axios.get(
-            `${api}/${Math.floor(Math.random() * 1000)}`
-          );
-          return Buffer.from(data).toString("base64");
+        const avatarPromises = Array.from({ length: 4 }, async (_, index) => {
+          const avatarId = `User_${index}_${Date.now()}`; // Unique string-based ID
+          const response = await fetch(`https://api.multiavatar.com/${JSON.stringify(avatarId)}`);
+          if (!response.ok) throw new Error("Failed to fetch avatar");
+          const svgText = await response.text();
+          return btoa(svgText); // Convert SVG to Base64
         });
-
+  
         const avatarsData = await Promise.all(avatarPromises);
         setAvatars(avatarsData);
       } catch (error) {
@@ -49,9 +47,10 @@ export default function SetAvatar() {
         setIsLoading(false);
       }
     };
-
+  
     fetchAvatars();
   }, []);
+  
 
   const setProfilePicture = async () => {
     if (selectedAvatar === null) {
@@ -59,9 +58,13 @@ export default function SetAvatar() {
     }
 
     const user = JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
-    const { data } = await axios.post(`${setAvatarRoute}/${user._id}`, {
-      image: avatars[selectedAvatar],
+    const response = await fetch(`${setAvatarRoute}/${user._id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ image: avatars[selectedAvatar] }),
     });
+
+    const data = await response.json();
 
     if (data.isSet) {
       user.isAvatarImageSet = true;
@@ -111,3 +114,4 @@ export default function SetAvatar() {
     </>
   );
 }
+*/

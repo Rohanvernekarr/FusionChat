@@ -3,7 +3,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { registerRoute } from "../utils/ApiRoutes";
-import { useNavigate }  from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [values, setValues] = useState({
@@ -12,6 +12,7 @@ function Register() {
     password: "",
     confirmPassword: "",
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -30,6 +31,11 @@ function Register() {
 
   const handleValidation = () => {
     const { username, password, confirmPassword } = values;
+
+    if (!username?.trim()) {
+      toast.error("Username is required.", toastOptions);
+      return false;
+    }
 
     if (username.length < 3) {
       toast.error("Username must be at least 3 characters long.", toastOptions);
@@ -65,30 +71,49 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (handleValidation()) {
-      console.log("in validation",registerRoute);
-      
-        const { username, email, password } = values;
-  
-        const { data } = await axios.post(registerRoute, {
-          username,
-          email,
-          password,
-        });
-        if (data.status === false) {
-          toast.error(data.msg, toastOptions);
-        }
-        if (data.status === true) {
-          localStorage.setItem("key",
-           
-            JSON.stringify(data.user)
-          );
-          navigate("/");
     
-    }}
+    if (!handleValidation()) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { username, email, password } = values;
+      
+      if (!username || !email || !password) {
+        throw new Error("Please fill in all required fields");
+      }
+
+      const response = await axios.post(registerRoute, {
+        username,
+        email,
+        password,
+      });
+
+      const { data } = response;
+
+      if (data.status === false) {
+        toast.error(data.msg, toastOptions);
+        return;
+      }
+
+      if (data.status === true && data.user) {
+        localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, JSON.stringify(data.user));
+        navigate("/");
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      toast.error(
+        error.response?.data?.msg || error.message || "Registration failed",
+        toastOptions
+      );
+    } finally {
+      setLoading(false);
+    }
   };
-  
+
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -156,9 +181,10 @@ function Register() {
           </div>
           <button
             type="submit"
-            className="p-3 bg-black text-white font-semibold rounded-md hover:bg-Black shadow-2xl transition duration-200"
+            disabled={loading}
+            className="p-3 bg-black text-white font-semibold rounded-md hover:bg-Black shadow-2xl transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
         <p className="mt-4 text-sm text-white text-center">
