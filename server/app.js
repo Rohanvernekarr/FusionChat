@@ -10,7 +10,6 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
-
 mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
@@ -27,31 +26,48 @@ app.get("/ping", (_req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-const PORT =  4000;
-const server = app.listen(PORT, () =>
-  console.log(`Server started on ${PORT}`)
+const server = app.listen(4000, () =>
+  console.log(`Server started on 4000`)
 ).on("error", (err) => {
   console.error("Server error:", err);
 });
 
 const io = socket(server, {
   cors: {
-    origin: "http://localhost:3000", // Update to match your frontend URL
+    origin: "http://localhost:3000",
     credentials: true,
   },
 });
 
-const onlineUsers = new Map();
+global.onlineUsers = new Map();
+
 io.on("connection", (socket) => {
-  const chatSocket = socket;
+  console.log("New client connected");
+
   socket.on("add-user", (userId) => {
     onlineUsers.set(userId, socket.id);
+    
   });
 
   socket.on("send-msg", (data) => {
+   
     const sendUserSocket = onlineUsers.get(data.to);
+    
     if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-receive", data.msg);
+      io.to(sendUserSocket).emit("msg-receive", {
+        message: data.message,
+        timestamp: data.timestamp
+      });
+    }
+  });
+
+  socket.on("disconnect", () => {
+    // Remove user from online users when they disconnect
+    for (const [userId, socketId] of onlineUsers.entries()) {
+      if (socketId === socket.id) {
+        onlineUsers.delete(userId);
+        break;
+      }
     }
   });
 });

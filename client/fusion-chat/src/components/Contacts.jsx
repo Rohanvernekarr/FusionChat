@@ -10,7 +10,7 @@ export default function Contacts({ contacts, changeChat }) {
       const data = await JSON.parse(
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
-      console.log(data);
+      
 
       setCurrentUserName(data.username);
     };
