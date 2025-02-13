@@ -70,24 +70,41 @@ export default function ChatContainer({ currentChat, socket }) {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full bg-gray-900">
-      <div className="flex items-center justify-between p-4 bg-gray-800">
-        <div className="flex items-center gap-4">
-          
-          <h3 className="text-white text-lg">{currentChat.username}</h3>
-        </div>
-        <Logout />
+    <div className="flex flex-col h-full bg-gray-900 overflow-auto">
+    {/* Header */}
+    <div className="flex items-center justify-between p-4 bg-gray-800">
+      <div className="flex items-center gap-4">
+        <h3 className="text-white text-lg">{currentChat.username}</h3>
       </div>
-      <div className="flex-1 overflow-auto p-4 space-y-4">
+      <Logout />
+    </div>
+  
+    {/* Chat Container */}
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Messages Container (Scrollable) */}
+      <div className="flex-1 overflow-auto p-4 space-y-4 bg-gray-900">
         {messages.map((message) => (
-          <div ref={scrollRef} key={uuidv4()} className={`flex ${message.fromSelf ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-xs md:max-w-sm px-4 py-2 rounded-lg text-white ${message.fromSelf ? "bg-blue-600" : "bg-purple-600"}`}>
+          <div
+            ref={scrollRef}
+            key={uuidv4()}
+            className={`flex ${message.fromSelf ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`max-w-xs md:max-w-sm px-4 py-2 rounded-lg text-white ${
+                message.fromSelf ? "bg-gray-600" : "bg-gray-600"
+              }`}
+            >
               <p>{message.message}</p>
             </div>
           </div>
         ))}
       </div>
-      <ChatInput handleSendMsg={handleSendMsg} />
+  
+      {/* Input Container (Sticky at the Bottom) */}
+      <div className="sticky bottom-0 p-2 bg-gray-800">
+        <ChatInput handleSendMsg={handleSendMsg} />
+      </div>
     </div>
+  </div>
   );
 }

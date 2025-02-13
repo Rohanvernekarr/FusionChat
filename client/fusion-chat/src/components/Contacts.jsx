@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Logo from "../assets/logo.svg";
+import Logo from "../assets/fusionchat.png";
 
 export default function Contacts({ contacts, changeChat }) {
-  const [currentUserName, setCurrentUserName] = useState(undefined);
-  const [currentSelected, setCurrentSelected] = useState(undefined);
+  const [currentUserName, setCurrentUserName] = useState("");
+  const [currentSelected, setCurrentSelected] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -11,7 +11,7 @@ export default function Contacts({ contacts, changeChat }) {
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
       );
       console.log(data);
-      
+
       setCurrentUserName(data.username);
     };
     fetchData();
@@ -30,18 +30,21 @@ export default function Contacts({ contacts, changeChat }) {
             <img src={Logo} alt="logo" className="h-8" />
             <h3 className="uppercase">Fusion Chat</h3>
           </div>
-          <div className="flex flex-col items-center overflow-auto gap-2 flex-1 p-2">
+          <div className="flex flex-col items-center overflow-auto  gap-2 flex-1 p-2">
             {contacts.map((contact, index) => (
               <div
                 key={contact._id}
-                className={`flex items-center gap-4 p-2 rounded-md cursor-pointer transition-colors w-11/12 ${index === currentSelected ? "bg-purple-500" : "bg-gray-700"}`}
+                className={`flex items-center gap-4 p-3 rounded-md cursor-pointer hover:bg-gray-700 transition-colors w-11/12
+                   ${
+                     index === currentSelected ? "bg-gray-600" : "bg-gray-800"
+                   }`}
                 onClick={() => changeCurrentChat(index, contact)}
               >
                 <h3>{contact.username}</h3>
               </div>
             ))}
           </div>
-          <div className="flex items-center justify-center gap-4 bg-gray-800 py-4">
+          <div className="flex items-center justify-center gap-4 bg-gray-900 py-4">
             <h2>{currentUserName}</h2>
           </div>
         </div>

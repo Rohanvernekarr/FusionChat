@@ -17,10 +17,10 @@ export default function Welcome() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen text-white text-center p-4">
+    <div className="flex flex-col items-center bg-gray-900 justify-center h-screen text-white text-center p-4">
       <img src={Robot} alt="Welcome Robot" className="h-60 mb-4" />
       <h1 className="text-3xl font-bold">
-        Welcome, <span className="text-indigo-500">{userName}!</span>
+        Welcome, <span className="text-violet-600">{userName}!</span>
       </h1>
       <h3 className="text-lg mt-2">Please select a chat to start messaging.</h3>
     </div>

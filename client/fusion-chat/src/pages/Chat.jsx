@@ -36,14 +36,13 @@ export default function Chat() {
 
   useEffect(() => {
     const fetchContacts = async () => {
-      if (currentUser) {
-        if (currentUser.isAvatarImageSet) {
+      if (currentUser) {      
           const { data } = await axios.get(`${allUsersRoute}/${currentUser._id}`);
           setContacts(data);
         } else {
           navigate("/");
         }
-      }
+      
     };
 
     fetchContacts();
@@ -54,11 +53,16 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen bg-gray-900">
-      <div className="h-[85vh] w-[85vw] bg-black bg-opacity-50 grid grid-cols-[25%_75%] md:grid-cols-[35%_65%] rounded-lg shadow-lg overflow-hidden">
-        <Contacts contacts={contacts} changeChat={handleChatChange} />
-        {currentChat === undefined ? <Welcome /> : <ChatContainer currentChat={currentChat} socket={socket} />}
-      </div>
-    </div>
+    <div className="flex flex-col min-h-screen w-full items-center justify-center bg-gradient-to-b from-gray-900 to-blue-900 p-4">
+  <div className="w-full max-w-7xl h-[85vh] bg-black/60 rounded-xl shadow-2xl grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[380px_1fr] overflow-hidden ring-1 ring-gray-700/30">
+    <Contacts contacts={contacts} changeChat={handleChatChange} />
+    {currentChat === undefined ? <Welcome /> : <ChatContainer currentChat={currentChat} socket={socket} />}
+  </div>
+  <footer className="text-gray-400 mt-4 text-center">
+  © {new Date().getFullYear()} Fusion Chat. All rights reserved. Unauthorized reproduction or distribution is strictly prohibited.
+</footer>
+
+</div>
+
   );
 }

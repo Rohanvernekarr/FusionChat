@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BiPowerOff } from "react-icons/bi";
+import { BiLogOut } from "react-icons/bi";
 import axios from "axios";
 import { logoutRoute } from "../utils/ApiRoutes";
 
@@ -21,9 +21,9 @@ export default function Logout() {
   return (
     <button
       onClick={handleClick}
-      className="flex justify-center items-center p-2 rounded-md bg-purple-500 hover:bg-purple-600 transition duration-200"
+      className="flex justify-center items-center p-2 rounded-md bg-gray-500 hover:bg-gray-600 transition duration-200"
     >
-      <BiPowerOff className="text-xl text-white" />
+      <BiLogOut  className="text-xl text-white" />
     </button>
   );
 }
