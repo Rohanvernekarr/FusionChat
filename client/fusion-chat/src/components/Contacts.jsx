@@ -46,11 +46,11 @@ export default function Contacts({ contacts, changeChat }) {
             {contacts.map((contact, index) => (
               <div
                 key={contact._id}
-                className={`flex items-center gap-4 p-3 rounded-md cursor-pointer hover:bg-gray-700 transition-colors w-11/12
+                className={`flex items-center gap-4 p-3 rounded-lg text-xl pl-4 cursor-pointer hover:bg-gray-700 transition-colors w-11/12
                    ${index === currentSelected ? "bg-gray-600" : "bg-gray-800"}`}
                 onClick={() => changeCurrentChat(index, contact)}
               >
-                <h3>{contact.username}</h3>
+                <h3>{contact.username} </h3>
               </div>
             ))}
           </div>

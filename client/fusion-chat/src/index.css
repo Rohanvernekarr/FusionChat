@@ -3,3 +3,26 @@
 @tailwind utilities;
 
 
+.custom-selection {
+    background: #051923; /* or your desired dark background color */
+    color: white;
+  }
+  
+  .custom-selection::selection {
+    background: #051923 !important;
+    color: white !important;
+  }
+  
+  .custom-selection::-moz-selection {
+    background: #051923 !important;
+    color: white !important;
+  }
+  
+  /* Override autofill styles */
+  .custom-selection:-webkit-autofill,
+  .custom-selection:-webkit-autofill:hover,
+  .custom-selection:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #051923 inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }

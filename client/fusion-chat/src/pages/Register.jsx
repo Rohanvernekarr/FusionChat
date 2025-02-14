@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import Logo from "../assets/fusionchat.png";
 import { registerRoute } from "../utils/ApiRoutes";
 import { useNavigate } from "react-router-dom";
 
@@ -119,21 +120,24 @@ function Register() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-richblack">
-      <div className="bg-richblack p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-White text-center mb-6">
-          Fusion Chat
-        </h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
+      
+      <div className=" bg-gray-900 p-8 rounded-lg shadow-md transition-transform duration-300 ease-in-out  hover:shadow-2xl w-full max-w-md">
+ 
+        <div className="flex justify-center gap-4 items-center mb-6">
+               <img src={Logo} alt="logo" className="h-8" />
+                 <h1 className="text-2xl font-bold text-gray-300 uppercase">Fusion <span className="text-blue-500  ">Chat</span> </h1>
+               </div>
         <form className="flex flex-col" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={values.username}
-            onChange={handleChange}
-            required
-            className="p-3 mb-4 border-b border-gray-500 text-White bg-richblack rounded-md focus:outline-none hover:shadow-2xl transition duration-200 focus:ring-2 focus:ring-gray-500"
-          />
+        <input
+  type="text"
+  name="username"
+  placeholder="Username"
+  value={values.username}
+  onChange={handleChange}
+  required
+  className="custom-selection p-3 mb-4 border-b border-gray-500 bg-richblack rounded-md focus:outline-none hover:shadow-2xl transition duration-200 focus:ring-2 focus:ring-gray-500"
+/>
           <input
             type="email"
             name="email"
@@ -141,7 +145,7 @@ function Register() {
             value={values.email}
             onChange={handleChange}
             required
-            className="p-3 mb-4 border-b bg-richblack text-White border-gray-500 rounded-md focus:outline-none hover:shadow-2xl transition duration-200 focus:ring-2 focus:ring-gray-500"
+            className="custom-selection p-3 mb-4 border-b border-gray-500 bg-richblack rounded-md focus:outline-none hover:shadow-2xl transition duration-200 focus:ring-2 focus:ring-gray-500"
           />
           <div className="relative mb-6">
             <input
@@ -182,19 +186,23 @@ function Register() {
           <button
             type="submit"
             disabled={loading}
-            className="p-3 bg-black text-white font-semibold rounded-md hover:bg-Black shadow-2xl transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 bg-blue-900 text-white font-semibold rounded-md hover:bg-blue-800 shadow-2xl transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? "Registering..." : "Register"}
           </button>
         </form>
         <p className="mt-4 text-sm text-white text-center">
           Already have an account?{" "}
-          <a href="/login" className="text-gray-500 hover:underline">
+          <a href="/login" className="text-violet-400 hover:underline">
             Login
           </a>
         </p>
       </div>
       <ToastContainer />
+      <br />
+      <footer className="text-gray-400  mt-4 text-center">
+    © {new Date().getFullYear()} Fusion Chat.
+  </footer>
     </div>
   );
 }
