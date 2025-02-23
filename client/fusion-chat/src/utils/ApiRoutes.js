@@ -1,4 +1,4 @@
-export const host = "https://fusion-chat-two.vercel.app/";
+export const host = process.env.REACT_APP_API_URL;
 
 
 export const loginRoute = `${host}/api/auth/login`;
