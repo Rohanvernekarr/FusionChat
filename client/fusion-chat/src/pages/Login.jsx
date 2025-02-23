@@ -19,14 +19,18 @@ export default function Login() {
     theme: "dark",
   };
 
-  // Check if user is already logged in
   useEffect(() => {
-    const storedUser = localStorage.getItem("fusionchat-user");
-    if (storedUser) {
+    const user = localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY);
+    
+    if (user) {
       console.log("User already logged in, navigating to home.");
       navigate("/");
+    } else {
+      toast.error("login to continue", toastOptions);
+      console.log("No user data found in localStorage");
     }
-  }, [navigate]);
+  }, []);
+  
 
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
@@ -59,9 +63,9 @@ export default function Login() {
       if (data.status === false) {
         toast.error(data.msg, toastOptions);
       } else {
-        localStorage.setItem("fusionchat-user", JSON.stringify(data.user));
+        localStorage.setItem(process.env.REACT_APP_LOCALHOST_KEY, JSON.stringify(data.user));
 
-        console.log("User saved in localStorage:", localStorage.getItem("fusionchat-user"));
+        console.log("User saved in localStorage:", localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
         
         navigate("/");
       }
