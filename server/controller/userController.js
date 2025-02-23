@@ -3,17 +3,34 @@ const bcrypt = require("bcrypt");
 
 module.exports.login = async (req, res, next) => {
   try {
+    console.log("Login API hit with data:", req.body); // Log request body
+
     const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ msg: "All fields are required", status: false });
+    }
+
     const user = await User.findOne({ username });
-    if (!user)
-      return res.json({ msg: "Incorrect Username or Password", status: false });
+    if (!user) {
+      console.log("User not found:", username);
+      return res.status(401).json({ msg: "Incorrect Username or Password", status: false });
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid)
-      return res.json({ msg: "Incorrect Username or Password", status: false });
-    delete user.password;
-    return res.json({ status: true, user });
+    if (!isPasswordValid) {
+      console.log("Invalid password attempt for:", username);
+      return res.status(401).json({ msg: "Incorrect Username or Password", status: false });
+    }
+
+    // Remove password from response
+    const userData = { ...user._doc };
+    delete userData.password;
+
+    console.log("Login successful for:", username);
+    return res.status(200).json({ status: true, user: userData });
   } catch (ex) {
-    next(ex);
+    console.error("Login Error:", ex);
+    return res.status(500).json({ msg: "Internal Server Error", status: false });
   }
 };
 
