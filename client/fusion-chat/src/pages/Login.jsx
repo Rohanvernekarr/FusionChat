@@ -42,19 +42,30 @@ export default function Login() {
     event.preventDefault();
     if (validateForm()) {
       const { username, password } = values;
-      const { data } = await axios.post(loginRoute, { username, password });
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
-      }
-      if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_OST_KEY,
-          JSON.stringify(data.user)
+      try {
+        console.log("Sending login request with:", { username, password });
+  
+        const { data } = await axios.post(
+          loginRoute,
+          { username, password },
+          { withCredentials: true }
         );
-        navigate("/");
+  
+        console.log("Login response:", data);
+  
+        if (data.status === false) {
+          toast.error(data.msg, toastOptions);
+        } else {
+          localStorage.setItem("fusionchat-user", JSON.stringify(data.user)); // Store the logged-in user
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Network error:", error);
+        toast.error("Network error. Please try again.");
       }
     }
   };
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 to-blue-900">
