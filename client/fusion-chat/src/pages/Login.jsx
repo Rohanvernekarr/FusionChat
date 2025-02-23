@@ -56,8 +56,11 @@ export default function Login() {
         if (data.status === false) {
           toast.error(data.msg, toastOptions);
         } else {
-          localStorage.setItem("fusionchat-user", JSON.stringify(data.user)); // Store the logged-in user
-          navigate("/");
+          localStorage.setItem("fusionchat-user", JSON.stringify(data.user));
+  
+          console.log("User saved in localStorage:", localStorage.getItem("fusionchat-user"));
+          
+          navigate("/");  // 🔥 Check if this line executes
         }
       } catch (error) {
         console.error("Network error:", error);
