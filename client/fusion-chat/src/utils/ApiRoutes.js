@@ -1,4 +1,4 @@
-export const host = "http://localhost:4000";
+export const host = "https://fusion-chat-two.vercel.app/";
 
 
 export const loginRoute = `${host}/api/auth/login`;
