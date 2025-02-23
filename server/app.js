@@ -11,13 +11,17 @@ app.use(cors());
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URL)
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("DB Connection Successful");
   })
   .catch((err) => {
     console.log(err.message);
   });
+  app.get("/", (req, res) => {
+    res.send("Backend is running!");
+  });
+  
 
 app.get("/ping", (_req, res) => {
   return res.json({ msg: "Ping Successful" });
