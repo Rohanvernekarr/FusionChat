@@ -10,7 +10,7 @@ const app = express();
 
 // CORS Configuration
 app.use(cors({
-  origin: ["https://fusion-chat-pink.vercel.app", "http://localhost:3000"], // Deployed frontend URL
+  origin: ["https://fusion-chat-plum.vercel.app", "http://localhost:3000"], // Deployed frontend URL
   methods: ["GET", "POST"],
   credentials: true,
 }));
@@ -49,7 +49,7 @@ const server = app.listen(PORT, () =>
 // Setup Socket.IO
 const io = socket(server, {
   cors: {
-    origin: ["https://fusion-chat-pink.vercel.app",  "http://localhost:3000"], // Frontend URL
+    origin: ["https://fusion-chat-plum.vercel.app",  "http://localhost:3000"], // Frontend URL
     methods: ["GET", "POST"],
     credentials: true,
   },
